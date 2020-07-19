@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+    <color name="color_Button_before">#F3C8DF0D</color>//底部导航栏按键按下前
+    <color name="color_Button_after">#F6A400</color>//底部导航栏按键按下后
+    <color name="color_BackGround_bottom_menu">#000DFF</color>//底部导航栏
+</resources>
