@@ -16,7 +16,7 @@ import android.view.MenuItem;
 import com.example.reader.fragment.BookMall_Fragment;
 import com.example.reader.fragment.Bookstore_Fragment;
 import com.example.reader.fragment.Community_Fragment;
-import com.example.reader.fragment.MfrangmentAdapter;
+import com.example.reader.Adapter.MfrangmentAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.lang.reflect.Field;
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initview();
-        setDrawerLeftEdgSize(MainActivity.this,drawerLayout,03f);
+        setDrawerLeftEdgSize(MainActivity.this,drawerLayout,0.3f);
         fragmentList.add(new Community_Fragment());
         fragmentList.add(new Bookstore_Fragment());
         fragmentList.add(new BookMall_Fragment());

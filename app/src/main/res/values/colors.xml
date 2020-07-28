@@ -6,4 +6,6 @@
     <color name="color_Button_before">#F3C8DF0D</color>//底部导航栏按键按下前
     <color name="color_Button_after">#F6A400</color>//底部导航栏按键按下后
     <color name="color_BackGround_bottom_menu">#000DFF</color>//底部导航栏
+    <color name="color_Byte">#ffffff</color>//社区字体颜色
+    <color name="color_Reading_menu">#000000</color>//阅读器菜单背景
 </resources>
