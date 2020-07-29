@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".PostCommunity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <Button
+            android:layout_width="wrap_content"
+            android:id="@+id/button_sending"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="发布"
+            android:background="@color/color_sending"/>
+    </RelativeLayout>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:id="@+id/book_name_send"
+        android:hint="书名"
+        android:gravity="center"
+        android:layout_height="wrap_content"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/book_community_send"
+        android:hint="你对本书的评价"/>
+</LinearLayout>

@@ -49,7 +49,7 @@ public class mRecycleAdapter extends RecyclerView.Adapter<mRecycleAdapter.Holder
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
-    public void onBindViewHolder(@NonNull final Holder holder, int position) {
+    public void onBindViewHolder(@NonNull final Holder holder, final int position) {
         holder.bookName.setText(communityList.get(position).bookName);
         holder.userName.setText(communityList.get(position).userName);
         holder.communityText.setText(communityList.get(position).community);
@@ -64,8 +64,10 @@ public class mRecycleAdapter extends RecyclerView.Adapter<mRecycleAdapter.Holder
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, ReadActivity.class);
-                intent.putExtra("bookName",communityList.get(0).bookName);
+                intent.putExtra("bookName",communityList.get(position).bookName);
                 context.startActivity(intent);
+//                MainActivity mainActivity = (MainActivity) context;
+//                mainActivity.finish();
             }
         });
 

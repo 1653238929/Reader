@@ -13,4 +13,16 @@ public class Utility {
     {
         return new Gson().fromJson(response,Pic.class);
     }
+    public static State handleStateResponse(String response)
+    {
+        return  new Gson().fromJson(response,State.class);
+    }
+    public static BookId handleBookIdResponse(String response)
+    {
+        return  new Gson().fromJson(response,BookId.class);
+    }
+    public static BookContext handleBookContextResponse(String response)
+    {
+        return  new Gson().fromJson(response,BookContext.class);
+    }
 }

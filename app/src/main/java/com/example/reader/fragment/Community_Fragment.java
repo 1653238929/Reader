@@ -1,5 +1,6 @@
 package com.example.reader.fragment;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -7,6 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.reader.Adapter.mRecycleAdapter;
+import com.example.reader.PostCommunity;
 import com.example.reader.R;
 import com.example.reader.db.Community;
 import com.example.reader.db.CommunityList;
@@ -42,11 +46,14 @@ public class Community_Fragment extends Fragment {
 
     private Pic pic;
 
+    private ImageView communityAdd;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.community_fragment,container,false);
         recyclerView = view.findViewById(R.id.recyclerView);
+        communityAdd = view.findViewById(R.id.community_add);
 //        Community community = new Community();
 //        communityList.add(community);
 //        communityList.add(community);
@@ -64,6 +71,7 @@ public class Community_Fragment extends Fragment {
         Log.e(TAG,"responseIcon   "+responseTextPic);
         if(responseText==null||responseTextPic==null)
         {
+            Log.e(TAG,"有问题");
             RequestCommunity();
             requestLoadPingPic();
         }else{
@@ -74,9 +82,16 @@ public class Community_Fragment extends Fragment {
         }
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-        Log.e(TAG,"community  "+communityList.size());
         mRecycleAdapter mRecycleAdapter = new mRecycleAdapter(communityList,getContext(),pic.picList);
         recyclerView.setAdapter(mRecycleAdapter);
+
+        communityAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), PostCommunity.class);
+                startActivity(intent);
+            }
+        });
         return view;
     }
 
