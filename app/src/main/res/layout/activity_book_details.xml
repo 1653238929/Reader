@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".BookDetails">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/linear_layout1"
+        android:layout_marginTop="5sp"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        >
+        <ImageView
+            android:layout_width="150sp"
+            android:layout_marginLeft="5sp"
+            android:layout_marginRight="5sp"
+            android:id="@+id/book_details_image"
+            android:layout_height="150sp"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:id="@+id/book_details_name"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:layout_height="wrap_content"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:textSize="12sp"
+                android:id="@+id/book_details_auther"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_margin="20sp"
+        android:textSize="17sp"
+        android:layout_below="@+id/linear_layout1"
+        android:layout_height="wrap_content"
+        android:id="@+id/book_details_context"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <Button
+            android:layout_width="0dp"
+            android:id="@+id/book_details_add_button"
+            android:layout_height="wrap_content"
+            android:text="加入书架"
+            android:layout_weight="1"/>
+        <Button
+            android:layout_width="0dp"
+            android:text="立即阅读"
+            android:id="@+id/book_details_read_button"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+</RelativeLayout>

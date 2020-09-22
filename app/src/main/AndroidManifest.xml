@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="n">
-        <activity android:name=".PostCommunity"></activity>
+        <activity android:name=".BookDetails"></activity>
+        <activity android:name=".PostCommunity" />
         <activity android:name=".ReadActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

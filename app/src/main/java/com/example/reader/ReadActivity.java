@@ -320,7 +320,7 @@ public class ReadActivity extends AppCompatActivity {
         chapter = prefs.getInt("chapter",0);
         if(chapter!=0)
         {
-            readText.setText(bookContext.data.get(chapter).contentData);
+            readText.setText(bookContext.data.get(chapter-1).contentData);
         }else {
             readText.setText(bookContext.data.get(0).contentData);
         }

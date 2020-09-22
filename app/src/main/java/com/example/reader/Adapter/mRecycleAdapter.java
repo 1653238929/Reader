@@ -35,9 +35,9 @@ public class mRecycleAdapter extends RecyclerView.Adapter<mRecycleAdapter.Holder
     private List<String> picList;
     @Override
     public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.community_item,parent,false);
-        Holder holder = new Holder(view);
-        return holder;
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.community_item,parent,false);
+            Holder holder = new Holder(view);
+            return holder;
     }
 
     public mRecycleAdapter(List<Community> list,Context con,List<String> listPic)

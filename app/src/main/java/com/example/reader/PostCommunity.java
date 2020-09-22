@@ -2,13 +2,17 @@ package com.example.reader;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.reader.fragment.Community_Fragment;
 import com.example.reader.util.State;
 import com.example.reader.util.Utility;
 
@@ -41,6 +45,7 @@ public class PostCommunity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 sendRequestWithOkhttp();
+                Toast.makeText(PostCommunity.this,"点击按钮",Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -55,16 +60,18 @@ public class PostCommunity extends AppCompatActivity {
     {
         final String bookNameSendText = bookNameSend.getText().toString();
         final String bookCommunityText = bookCommunitySend.getText().toString();
+        Toast.makeText(PostCommunity.this,"进入函数",Toast.LENGTH_SHORT).show();
         new Thread(new Runnable() {
             @Override
             public void run() {
+                Log.e(TAG, "run: 进入线程");
                 RequestBody requestBody = new Builder()
                         .add("userId","0")
                         .add("bookName",bookNameSendText)
                         .add("postContent",bookCommunityText)
                         .build();
                 Request request = new Request.Builder()
-                        .url("https://106.55.148.161:8080/ireader/post/release")
+                        .url("http://106.55.148.161:8080/ireader/post/release")
                         .post(requestBody)
                         .build();
 
@@ -72,16 +79,26 @@ public class PostCommunity extends AppCompatActivity {
                     OkHttpClient client = new OkHttpClient();
                     Response response = client.newCall(request).execute();
                     String responseText = response.body().string();
-                    State state = Utility.handleStateResponse(responseText);
+                    final State state = Utility.handleStateResponse(responseText);
                     Log.e(TAG,"code = "+state.code);
-                    if(state.code==0)
-                    {
-                        Toast.makeText(PostCommunity.this,"发表成功",Toast.LENGTH_SHORT).show();
-                    }else {
-                        Toast.makeText(PostCommunity.this,"发表失败",Toast.LENGTH_SHORT).show();
-                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(state.code==0)
+                            {
+                                Toast.makeText(PostCommunity.this,"发表成功",Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(PostCommunity.this,MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }else {
+                                Toast.makeText(PostCommunity.this,"发表失败",Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
                 } catch (IOException e) {
                     e.printStackTrace();
+                    Log.e(TAG, "run: 进入异常"+e.getMessage());
                 }
             }
         }).start();

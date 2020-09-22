@@ -46,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
         MfrangmentAdapter mfrangmentAdapter = new MfrangmentAdapter(getSupportFragmentManager(),fragmentList);
         viewPager.setAdapter(mfrangmentAdapter);
 
+        viewPager.setCurrentItem(1);
+        bottomNavigationView.getMenu().getItem(1).setChecked(true);
+
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

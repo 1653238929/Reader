@@ -10,12 +10,12 @@
     <item
         android:id="@+id/bottom_item_2"
         android:enabled="true"
-        android:title="@string/app_bookstore"
+        android:title="@string/app_bookMall"
         app:showAsAction="always"/>
     <item
         android:id="@+id/bottom_item_3"
         android:enabled="true"
-        android:title="@string/app_bookMall"
+        android:title="@string/app_bookstore"
         app:showAsAction="always"/>
 
 </menu>

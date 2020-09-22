@@ -1,8 +1,11 @@
 package com.example.reader.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.reader.Adapter.mRecycleAdapter;
@@ -48,42 +52,50 @@ public class Community_Fragment extends Fragment {
 
     private ImageView communityAdd;
 
+    private String responseText;
+
+    private String responseTextPic;
+
+    private boolean state_1 = false;
+
+    private boolean state_2 = false;
+
+    private SwipeRefreshLayout swipeRefreshLayout;
+    @SuppressLint("HandlerLeak")
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            switch (msg.what)
+            {
+                case 1:
+                    if(state_1&&state_2)
+                    {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mRecycleAdapter mRecycleAdapter = new mRecycleAdapter(communityList,getContext(),pic.picList);
+                                recyclerView.setAdapter(mRecycleAdapter);
+                            }
+                        });
+
+                    }
+            }
+            super.handleMessage(msg);
+        }
+    };
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.community_fragment,container,false);
         recyclerView = view.findViewById(R.id.recyclerView);
         communityAdd = view.findViewById(R.id.community_add);
-//        Community community = new Community();
-//        communityList.add(community);
-//        communityList.add(community);
-//        communityList.add(community);
-//        communityList.add(community);
-//        communityList.add(community);
-//        communityList.add(community);
-//        communityList.add(community);
-//        communityList.add(community);
+        swipeRefreshLayout = view.findViewById(R.id.community_swipe);
 
-        SharedPreferences pres = PreferenceManager.getDefaultSharedPreferences(getContext());
-        String responseText = pres.getString("community",null);
-        String responseTextPic = pres.getString("bingpic",null);
-        Log.e(TAG,"response  "+responseText);
-        Log.e(TAG,"responseIcon   "+responseTextPic);
-        if(responseText==null||responseTextPic==null)
-        {
-            Log.e(TAG,"有问题");
-            RequestCommunity();
-            requestLoadPingPic();
-        }else{
-            CommunityList communities  = new CommunityList();
-            communities = Utility.handleCommunity(responseText);
-            communityList = communities.communityList;
-            pic = Utility.handlePicResponse(responseTextPic);
-        }
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-        mRecycleAdapter mRecycleAdapter = new mRecycleAdapter(communityList,getContext(),pic.picList);
-        recyclerView.setAdapter(mRecycleAdapter);
+            RequestCommunity();
+            requestLoadPingPic();
 
         communityAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,21 +120,25 @@ public class Community_Fragment extends Fragment {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                final String bingPic = response.body().string();
-                pic= Utility.handlePicResponse(bingPic);
+                responseTextPic = response.body().string();
+                pic= Utility.handlePicResponse(responseTextPic);
                 SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getContext()).edit();
-                editor.putString("bingpic",bingPic);
+                editor.putString("bingpic",responseTextPic);
                 editor.apply();
-                Log.e(TAG,"responseIcon   "+bingPic);
+                Log.e(TAG,"responseIcon   "+responseTextPic);
+                state_1 = !state_1;
+                Message message = Message.obtain();
+                message.what = 1;
+                handler.sendMessage(message);
             }
         });
     }
 
-    private void RequestCommunity()
+    public void RequestCommunity()
     {
         int i = 1;
         int j = 10;
-        final String url = "http://106.55.148.161:8080/ireader/post/list?page=0&size=10";
+        final String url = "http://106.55.148.161:8080/ireader/post/list?page=0&size=5";
         HttpUtil.sendOkHttpRequest(url, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -132,17 +148,22 @@ public class Community_Fragment extends Fragment {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                    final String communityString = response.body().string();
-                    final CommunityList communities = Utility.handleCommunity(communityString);
+                    responseText = response.body().string();
+                    final CommunityList communities = Utility.handleCommunity(responseText);
                     Log.e(TAG,"code =   "+communities.code);
                     if(communities.code==0)
                     {
                         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getContext()).edit();
-                        editor.putString("community", communityString);
+                        editor.putString("community", responseText);
                         editor.apply();
                         communityList = communities.communityList;
                     }
+                    state_2 = !state_2;
+                Message message = Message.obtain();
+                message.what = 1;
+                handler.sendMessage(message);
             }
         });
     }
+
 }
