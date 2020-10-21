@@ -27,6 +27,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.reader.db.BookContentData;
 import com.example.reader.util.BookContext;
 import com.example.reader.util.BookId;
 import com.example.reader.util.Cyclephoto;
@@ -101,6 +102,8 @@ public class ReadActivity extends AppCompatActivity {
     private Button downChapter;
 
     private SeekBar chapterSeeBar;
+
+    private  BookContentData bookContentData;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -284,9 +287,9 @@ public class ReadActivity extends AppCompatActivity {
             }
         });
     }
-    public void requestBookContext(String bookId)
+    public void requestBookContext(final String bookId)
     {
-        final String url = "http://106.55.148.161:8080/ireader/book/chapter?bookId="+bookId;
+        final String url = "http://106.55.148.161:8080/ireader/book/index?bookId="+bookId;
         HttpUtil.sendOkHttpRequest(url, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -296,15 +299,15 @@ public class ReadActivity extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 final String responseText = response.body().string();
                 bookContext = Utility.handleBookContextResponse(responseText);
-                final List<String> chapterTitleList = new ArrayList<>();
-                for(int i=0;i<bookContext.data.size();i++)
-                {
-                    chapterTitleList.add(bookContext.data.get(i).chapterTitle);
-                }
+//                final List<String> chapterTitleList = new ArrayList<>();
+//                for(int i=0;i<bookContext.data.size();i++)
+//                {
+//                    chapterTitleList.add(bookContext.data.get(i).chapterTitle);
+//                }
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        showBookContext(chapterTitleList);
+                        showBookContext(bookContext,bookId);
                     }
                 });
 
@@ -312,18 +315,14 @@ public class ReadActivity extends AppCompatActivity {
         });
     }
 
-    private void showBookContext(final List<String> chapterTitleList) {
-        adapter =new ArrayAdapter<>(ReadActivity.this,android.R.layout.simple_list_item_1,chapterTitleList);
+    private void showBookContext(final BookContext bookContext, final String bookId)
+    {
+        adapter =new ArrayAdapter<>(ReadActivity.this,android.R.layout.simple_list_item_1,bookContext.getList());
         catalogueListView.setAdapter(adapter);
-        chapterSeeBar.setMax(chapterTitleList.size()-1);
+        chapterSeeBar.setMax(bookContext.size()-1);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        chapter = prefs.getInt("chapter",0);
-        if(chapter!=0)
-        {
-            readText.setText(bookContext.data.get(chapter-1).contentData);
-        }else {
-            readText.setText(bookContext.data.get(0).contentData);
-        }
+        chapter = prefs.getInt(bookId+"chapter",0);
+        requestBookContentData(bookContext.data.get(chapter).chapterId);
         chapterSeeBar.setProgress(chapter);
         upChapter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -335,9 +334,10 @@ public class ReadActivity extends AppCompatActivity {
                     Toast.makeText(ReadActivity.this,"已经是第一章了",Toast.LENGTH_SHORT).show();
                 }
                 chapterSeeBar.setProgress(chapter);
-                readText.setText(bookContext.data.get(chapter).contentData);
+                requestBookContentData(bookContext.data.get(chapter).chapterId);
+                myscrollView.scrollTo(0,0);
                 SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(ReadActivity.this).edit();
-                editor.putInt("chapter",chapter);
+                editor.putInt(bookId+"chapter",chapter);
                 editor.apply();
             }
         });
@@ -345,15 +345,16 @@ public class ReadActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 chapter++;
-                if(chapter>=chapterTitleList.size())
+                if(chapter>=bookContext.getList().size())
                 {
-                    chapter=chapterTitleList.size()-1;
+                    chapter=bookContext.getList().size()-1;
                     Toast.makeText(ReadActivity.this,"已经到最后一章了",Toast.LENGTH_SHORT).show();
                 }
                 chapterSeeBar.setProgress(chapter);
-                readText.setText(bookContext.data.get(chapter).contentData);
+                myscrollView.scrollTo(0,0);
+                requestBookContentData(bookContext.data.get(chapter).chapterId);
                 SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(ReadActivity.this).edit();
-                editor.putInt("chapter",chapter);
+                editor.putInt(bookId+"chapter",chapter);
                 editor.apply();
             }
         });
@@ -362,9 +363,10 @@ public class ReadActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 chapter = progress;
-                readText.setText(bookContext.data.get(chapter).contentData);
+                requestBookContentData(bookContext.data.get(chapter).chapterId);
+                myscrollView.scrollTo(0,0);
                 SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(ReadActivity.this).edit();
-                editor.putInt("chapter",chapter);
+                editor.putInt(bookId+"chapter",chapter);
                 editor.apply();
             }
 
@@ -381,16 +383,43 @@ public class ReadActivity extends AppCompatActivity {
         catalogueListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                readText.setText(bookContext.data.get(position).contentData);
                 SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(ReadActivity.this).edit();
-                editor.putInt("chapter",position);
+                editor.putInt(bookId+"chapter",chapter);
                 editor.apply();
                 chapter = position;
+                requestBookContentData(bookContext.data.get(chapter).chapterId);
                 chapterSeeBar.setProgress(chapter);
                 myscrollView.scrollTo(0,0);
                 catalogue.setVisibility(View.INVISIBLE);
             }
         });
 
+    }
+
+    public void requestBookContentData(int id)
+    {
+        final String url = "http://106.55.148.161:8080/ireader/book/getContentById?chapterId=" +id;
+        HttpUtil.sendOkHttpRequest(url, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String DataResponseText = response.body().string();
+                bookContentData = Utility.handleBookContentData(DataResponseText);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showBookContentData(bookContentData);
+                    }
+                });
+            }
+        });
+    }
+
+    private void showBookContentData(BookContentData bookContentData) {
+
+        readText.setText(bookContentData.data);
     }
 }

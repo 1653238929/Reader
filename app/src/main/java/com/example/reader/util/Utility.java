@@ -2,6 +2,7 @@ package com.example.reader.util;
 
 import com.example.reader.BookDetails;
 import com.example.reader.db.BookCatalogue;
+import com.example.reader.db.BookContentData;
 import com.example.reader.db.BookDetail;
 import com.example.reader.db.BookName;
 import com.example.reader.db.Community;
@@ -40,5 +41,9 @@ public class Utility {
     public  static BookDetail handleBookDetail(String response)
     {
         return  new Gson().fromJson(response,BookDetail.class);
+    }
+    public  static BookContentData handleBookContentData(String response)
+    {
+        return  new Gson().fromJson(response,BookContentData.class);
     }
 }

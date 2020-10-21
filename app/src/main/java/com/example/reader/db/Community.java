@@ -12,4 +12,5 @@ public class Community {
     public String community;
     @SerializedName("postIcon")
     public String icon;
+    public int  bookId;
 }

@@ -63,6 +63,7 @@ public class BookDetails extends AppCompatActivity {
 
         bookId = getIntent().getIntExtra("book_id",0);
 
+
         DelectFile.cleanSharedPreference(BookDetails.this);
 
         requestBookDetails();
@@ -113,12 +114,14 @@ public class BookDetails extends AppCompatActivity {
                 responseText = response.body().string();
                 Log.e(TAG, "onResponse: "+responseText );
                 final BookDetail bookDetail = Utility.handleBookDetail(responseText);
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        showBookDetails(bookDetail);
+                            showBookDetails(bookDetail);
                     }
                 });
+
 
             }
         });

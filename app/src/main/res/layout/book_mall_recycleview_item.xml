@@ -20,19 +20,19 @@
         <TextView
             android:layout_width="wrap_content"
             android:id="@+id/book_mall_name"
-            android:textColor="#ffffff"
+            android:textColor="#767171"
             android:layout_height="wrap_content"
             android:textSize="15sp"/>
         <TextView
             android:layout_width="wrap_content"
             android:id="@+id/book_mall_auther"
-            android:textColor="#ffffff"
+            android:textColor="#afabab"
             android:layout_height="wrap_content"
             android:textSize="12sp"/>
         <TextView
             android:layout_width="wrap_content"
             android:id="@+id/book_mall_context"
-            android:textColor="#ffffff"
+            android:textColor="#afabab"
             android:maxLines="2"
             android:ellipsize="end"
             android:layout_height="wrap_content"

@@ -61,9 +61,4 @@ public class BookMall_Fragment extends Fragment {
         swipeRefreshLayout = view.findViewById(R.id.book_mall_swipe);
     }
 
-    public void renew()
-    {
-        BookMallRecycleViewAdapter bookMallRecycleViewAdapter = new BookMallRecycleViewAdapter(getContext());
-        recyclerView.setAdapter(bookMallRecycleViewAdapter);
-    }
 }

@@ -138,7 +138,7 @@ public class Community_Fragment extends Fragment {
     {
         int i = 1;
         int j = 10;
-        final String url = "http://106.55.148.161:8080/ireader/post/list?page=0&size=5";
+        final String url = "http://106.55.148.161:8080/ireader/post/list?page=0&size=10";
         HttpUtil.sendOkHttpRequest(url, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {

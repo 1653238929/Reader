@@ -13,7 +13,7 @@
 
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
-            android:background="#E17F7F"
+            android:background="#595959"
             android:layout_height="wrap_content"
             >
             <TextView
@@ -33,7 +33,7 @@
         android:layout_height="match_parent">
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/book_mall_recycleView"
-            android:background="@drawable/book_mall_background"
+            android:background="#f2f2f2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
